@@ -24,20 +24,6 @@ resource "aws_security_group" "sg_wireguard" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  ingress {
-    from_port   = 9586
-    to_port     = 9586
-    protocol    = "tcp"
-    cidr_blocks = [var.prometheus_server_ip]
-  }
-
-  ingress {
-    from_port   = 9100
-    to_port     = 9100
-    protocol    = "tcp"
-    cidr_blocks = [var.prometheus_server_ip]
-  }
-
   egress {
     from_port   = 0
     to_port     = 0
