@@ -57,13 +57,13 @@ resource "aws_launch_configuration" "wireguard_launch_config" {
   iam_instance_profile = (var.use_eip ? aws_iam_instance_profile.wireguard_profile[0].name : null)
   user_data = templatefile("${path.module}/templates/user-data.txt", {
     wg_server_private_key              = var.use_ssm ? "AWS_SSM_PARAMETER" : var.wg_server_private_key,
-    wg_server_private_key_aws_ssm_name = var.use_ssm ? aws_ssm_parameter.wireguard_server_private_key[0].name : null,
+    wg_server_private_key_aws_ssm_name = var.use_ssm ? aws_ssm_parameter.wireguard_server_private_key[0].name : "null",
     wg_server_net                      = var.wg_server_net,
     wg_server_port                     = var.wg_server_port,
     peers                              = join("\n", data.template_file.wg_client_data_json.*.rendered),
-    use_eip                            = var.use_eip ? "enabled" : "disabled",
+    use_eip                            = var.use_eip,
     eip_id                             = aws_eip.wireguard.id,
-    use_ssm                            = var.use_ssm ? "true" : "false",
+    use_ssm                            = var.use_ssm,
     wg_server_interface                = var.wg_server_interface
   })
   security_groups             = [aws_security_group.sg_wireguard.id]
